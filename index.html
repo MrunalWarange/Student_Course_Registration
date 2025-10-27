@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>College Course Registration System</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🎓 College Course Registration System</h1>
+            <p class="subtitle">Manage your academic journey with ease</p>
+        </header>
+
+        <div class="main-content">
+            <!-- Menu Section -->
+            <nav class="menu-section">
+                <h2>Navigation</h2>
+                <button class="menu-btn" onclick="showSection('view-courses')">
+                    <span class="icon">📚</span>
+                    View All Courses
+                </button>
+                <button class="menu-btn" onclick="showSection('register-course')">
+                    <span class="icon">✏️</span>
+                    Register for Course
+                </button>
+                <button class="menu-btn" onclick="showSection('my-courses')">
+                    <span class="icon">📋</span>
+                    My Registered Courses
+                </button>
+                <button class="menu-btn" onclick="showSection('drop-course')">
+                    <span class="icon">🗑️</span>
+                    Drop a Course
+                </button>
+                
+                <div class="stats-card">
+                    <h3>Your Stats</h3>
+                    <div class="stat-item">
+                        <span>Registered Courses:</span>
+                        <strong id="course-count">0</strong>
+                    </div>
+                    <div class="stat-item">
+                        <span>Available Slots:</span>
+                        <strong id="slots-remaining">10</strong> / <strong id="max-slots">10</strong>
+                    </div>
+                </div>
+            </nav>
+
+            <!-- Content Sections -->
+            <main class="content-area">
+                <!-- View All Courses Section -->
+                <section id="view-courses" class="content-section active">
+                    <h2>Available Courses</h2>
+                    <p class="section-description">Browse through our comprehensive course catalog</p>
+                    
+                    <div class="courses-grid" id="courses-grid"></div>
+                </section>
+
+                <!-- Register Course Section -->
+                <section id="register-course" class="content-section">
+                    <h2>Register for a Course</h2>
+                    <p class="section-description">Complete the form below to register for a course</p>
+                    
+                    <div class="registration-form-container">
+                        <form id="course-registration-form" onsubmit="handleCourseRegistration(event)">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="student-name">Full Name *</label>
+                                    <input type="text" id="student-name" class="input-field" placeholder="Enter your full name" required>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="student-id">Student ID *</label>
+                                    <input type="text" id="student-id" class="input-field" placeholder="e.g., 2024001" required>
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="student-email">Email Address *</label>
+                                    <input type="email" id="student-email" class="input-field" placeholder="student@college.edu" required>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="student-department">Department *</label>
+                                    <select id="student-department" class="input-field select-field" required>
+                                        <option value="">-- Select Department --</option>
+                                        <option value="CSE">Computer Science & Engineering (CSE)</option>
+                                        <option value="IT">Information Technology (IT)</option>
+                                        <option value="ECE">Electronics & Communication (ECE)</option>
+                                        <option value="ME">Mechanical Engineering (ME)</option>
+                                        <option value="CE">Civil Engineering (CE)</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Select Courses * (Choose one or more)</label>
+                                <div id="course-checkboxes" class="course-checkboxes">
+                                    <!-- Checkboxes will be populated by JavaScript -->
+                                </div>
+                                <small class="form-hint">Select all courses you want to register for</small>
+                            </div>
+                            
+                            <button type="submit" class="action-btn primary full-width">
+                                Register Course
+                            </button>
+
+                        </form>
+                        
+                        <div id="register-message" class="message-box"></div>
+                    </div>
+
+                    <div class="help-text">
+                        <h3>💡 Quick Guide:</h3>
+                        <ul>
+                            <li>All fields marked with * are required</li>
+                            <li>Check prerequisite requirements before registering</li>
+                            <li>Your information will be stored locally</li>
+                            <li>Maximum 10 courses can be registered at once</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <!-- My Registered Courses Section -->
+                <section id="my-courses" class="content-section">
+                    <h2>My Registered Courses</h2>
+                    <p class="section-description">Your current course schedule</p>
+                    
+                    <div id="registered-courses-container">
+                        <!-- Table will be populated by JavaScript -->
+                    </div>
+                    
+                    <div class="table-actions" id="table-actions" style="display: none;">
+                        <button onclick="clearAllRegistrations()" class="action-btn danger-outline">
+                            <span class="icon">🗑️</span>
+                            Clear All Registrations
+                        </button>
+                    </div>
+                </section>
+
+                <!-- Drop Course Section -->
+                <section id="drop-course" class="content-section">
+                    <h2>Drop a Course</h2>
+                    <p class="section-description">Remove a course from your schedule</p>
+                    
+                    <div class="form-container">
+                        <div class="form-group">
+                            <label for="drop-code">Select Course to Drop:</label>
+                            <label for="drop-student-id">Enter Student ID:</label>
+                            <input type="text" id="drop-student-id" placeholder="Enter Student ID" class="input-field" />
+                            <select id="drop-code" class="input-field select-field">
+                                <option value="">-- Choose a course --</option>
+                            </select>
+                        </div>
+                        <button onclick="dropCourse()" class="action-btn danger">Drop Course</button>
+                        
+                        <div id="drop-message" class="message-box"></div>
+                    </div>
+
+                    <div class="divider"></div>
+
+                    <div class="drop-all-section">
+                        <h3>Drop All Courses</h3>
+                        <p class="section-description">Clear your entire course schedule at once</p>
+                        <button onclick="dropAllCourses()" class="action-btn danger-outline">
+                            <span class="icon">🗑️</span>
+                            Drop All Courses
+                        </button>
+                    </div>
+
+                    <div class="warning-box">
+                        <strong>⚠️ Warning:</strong> Dropping a course may affect your ability to take courses that have this as a prerequisite.
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast"></div>
+
+    <!-- Course Details Modal -->
+    <div id="course-modal" class="modal">
+        <div class="modal-overlay" onclick="closeModal()"></div>
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal()" aria-label="Close modal">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+            </button>
+            
+            <div class="modal-header">
+                <div class="modal-course-code" id="modal-course-code"></div>
+                <h2 class="modal-title" id="modal-title"></h2>
+            </div>
+            
+            <div class="modal-body">
+                <div class="modal-section">
+                    <h3 class="modal-section-title">📖 Course Description</h3>
+                    <p class="modal-description" id="modal-description"></p>
+                </div>
+                
+                <div class="modal-section">
+                    <h3 class="modal-section-title">📋 Prerequisites</h3>
+                    <p class="modal-prerequisite" id="modal-prerequisite"></p>
+                </div>
+            </div>
+            
+            <div class="modal-footer">
+                <button onclick="registerFromModal()" class="action-btn primary modal-action-btn">
+                    Register for this Course
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
+

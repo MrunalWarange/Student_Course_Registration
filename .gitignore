@@ -1,0 +1,23 @@
+# Executables
+*.exe
+*.out
+*.o
+
+# Object files
+*.obj
+
+# Build artifacts
+course_registration
+course_registration_new
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
